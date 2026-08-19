@@ -1,0 +1,47 @@
+/* 1. Global box-sizing rule for intuitive layouts */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* 2. Setup typography standards and clean document background */
+html {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  line-height: 1.5;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  min-height: 100vh;
+  background-color: #ffffff;
+  color: #212529;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 3. Responsive media elements */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 4. Form controls inheritance fixes */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* 5. Accessible interactive focus states */
+a {
+  color: inherit;
+  text-decoration: none;
+}
