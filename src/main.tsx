@@ -1,12 +1,10 @@
-import { createRoot } from 'react-dom/client'
-import './index.css'
-import React from 'react'
-import { ThemeProvider } from './app/providers/theme-provider'
+import { createRoot } from "react-dom/client";
+import "./index.css";
+import React from "react";
+import { App } from "./app/App";
 
-createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <ThemeProvider>
-      <div></div>
-    </ThemeProvider>
-  </React.StrictMode>,
-)
+createRoot(document.getElementById("root")!).render(
+	<React.StrictMode>
+		<App />
+	</React.StrictMode>,
+);
