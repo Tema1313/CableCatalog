@@ -11,6 +11,8 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AboutRouteImport } from './routes/about'
+import { Route as CatalogsColorsRouteImport } from './routes/catalogs/colors'
+import { Route as CatalogsMaterialsRouteImport } from './routes/catalogs/materials'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -22,31 +24,49 @@ const AboutRoute = AboutRouteImport.update({
   path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CatalogsColorsRoute = CatalogsColorsRouteImport.update({
+  id: '/catalogs/colors',
+  path: '/catalogs/colors',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogsMaterialsRoute = CatalogsMaterialsRouteImport.update({
+  id: '/catalogs/materials',
+  path: '/catalogs/materials',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/catalogs/colors': typeof CatalogsColorsRoute
+  '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/catalogs/colors': typeof CatalogsColorsRoute
+  '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/about': typeof AboutRoute
+  '/catalogs/colors': typeof CatalogsColorsRoute
+  '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about'
+  fullPaths: '/' | '/about' | '/catalogs/colors' | '/catalogs/materials'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about'
-  id: '__root__' | '/' | '/about'
+  to: '/' | '/about' | '/catalogs/colors' | '/catalogs/materials'
+  id: '__root__' | '/' | '/about' | '/catalogs/colors' | '/catalogs/materials'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AboutRoute: typeof AboutRoute
+  CatalogsColorsRoute: typeof CatalogsColorsRoute
+  CatalogsMaterialsRoute: typeof CatalogsMaterialsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -65,12 +85,28 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/catalogs/colors': {
+      id: '/catalogs/colors'
+      path: '/catalogs/colors'
+      fullPath: '/catalogs/colors'
+      preLoaderRoute: typeof CatalogsColorsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogs/materials': {
+      id: '/catalogs/materials'
+      path: '/catalogs/materials'
+      fullPath: '/catalogs/materials'
+      preLoaderRoute: typeof CatalogsMaterialsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AboutRoute: AboutRoute,
+  CatalogsColorsRoute: CatalogsColorsRoute,
+  CatalogsMaterialsRoute: CatalogsMaterialsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

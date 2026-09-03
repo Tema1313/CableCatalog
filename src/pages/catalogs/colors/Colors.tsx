@@ -1,0 +1,192 @@
+import { Button } from "@/shared/components/ui/button"
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableHeaderSortCell,
+	TableRow,
+} from "@/shared/components/ui/table"
+import type { IColor } from "@/shared/data/model"
+import { colorsDTO } from "@/shared/data/testdata"
+import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
+import {
+	type ColumnDef,
+	flexRender,
+	getCoreRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	type SortingState,
+	useReactTable,
+} from "@tanstack/react-table"
+import { Loader2, RefreshCcw, Trash } from "lucide-react"
+import React from "react"
+import { useEffect, useState, type FC } from "react"
+import DateObject from "react-date-object"
+import { UpdateColor } from "./UpdateColor"
+import { Warning } from "@/shared/components/controls/warning"
+import { toast } from "sonner"
+import { TablePagination } from "@/shared/components/ui/table-pagination"
+import { CreateColor } from "./CreateColor"
+
+export interface IColorsProps {}
+
+export const Colors: FC<IColorsProps> = (props) => {
+	const [colors, setColors] = useState<IColor[]>([])
+	const [loading, reqSim] = useRequestSimulation()
+
+	useEffect(() => {
+		reqSim(() => {
+			setColors(colorsDTO)
+		}, 2000)
+	}, [])
+
+	const [sorting, setSorting] = React.useState<SortingState>([])
+	const [pagination, setPagination] = React.useState({
+		pageIndex: 0,
+		pageSize: 10,
+	})
+
+	const columns: ColumnDef<IColor>[] = [
+		{
+			accessorKey: "name",
+			header: ({ column }) => <TableHeaderSortCell title="Цвет" {...column} />,
+		},
+		{
+			accessorKey: "grb",
+			header: ({ column }) => <TableHeaderSortCell title="Цвет(rgb)" {...column} />,
+		},
+		{
+			accessorKey: "comment",
+			header: ({ column }) => <TableHeaderSortCell title="Комментарий" {...column} />,
+		},
+		{
+			accessorKey: "date",
+			header: ({ column }) => <TableHeaderSortCell title="Дата модификации" {...column} />,
+			cell: ({ row }) => {
+				return <div>{new DateObject(row.getValue<IColor["date"]>("date") || "").format("DD.MM.YYYY")}</div>
+			},
+		},
+		{
+			id: "update",
+			enableHiding: false,
+			cell: ({ row }) => <UpdateColor color={row.original} />,
+		},
+		{
+			id: "delete",
+			enableHiding: false,
+			cell: ({ row }) => (
+				<Warning
+					actionClick={() => {
+						reqSim(() => {
+							console.log("trying to delete the element...")
+							toast("Error delete")
+						})
+					}}
+					actionTitle="delete"
+				>
+					<Button variant="link" className="cursor-pointer">
+						<Trash className="ml-2 h-4 w-4 " color="red" />
+					</Button>
+				</Warning>
+			),
+		},
+	]
+
+	const table = useReactTable({
+		data: colors,
+		columns,
+		state: {
+			sorting,
+			pagination,
+		},
+		getCoreRowModel: getCoreRowModel(),
+		onSortingChange: setSorting,
+		getSortedRowModel: getSortedRowModel(),
+		getPaginationRowModel: getPaginationRowModel(),
+	})
+
+	return (
+		<div className="m-4">
+			<div className="flex justify-between content-center">
+				<div className="mb-3 text-xl font-bold">Цвета</div>
+				<div className="flex">
+					<div>
+						<Button
+							onClick={() => {
+								// Если бы использовался tanstack-query, то  тут можно было бы просто инвалидировать запрос
+								reqSim(() => {
+									setColors(colorsDTO)
+								}, 2000)
+							}}
+							size="sm"
+							variant="ghost"
+							className="ml-auto green cursor-pointer"
+							title="Обновить"
+						>
+							<RefreshCcw color="#4082b7" />
+						</Button>
+					</div>
+					<CreateColor />
+				</div>
+			</div>
+			{loading ? (
+				<div className="flex justify-center">
+					<Loader2 className="m-2 h-10 w-10 animate-spin justify-center " />
+				</div>
+			) : (
+				<div>
+					<div className="overflow-hidden rounded-md border">
+						<Table>
+							<TableHeader>
+								{table.getHeaderGroups().map((headerGroup) => (
+									<TableRow key={headerGroup.id}>
+										{headerGroup.headers.map((header) => {
+											return (
+												<TableHead key={header.id}>
+													{header.isPlaceholder
+														? null
+														: flexRender(header.column.columnDef.header, header.getContext())}
+												</TableHead>
+											)
+										})}
+									</TableRow>
+								))}
+							</TableHeader>
+							<TableBody>
+								{table.getRowModel().rows?.length ? (
+									table.getRowModel().rows.map((row) => (
+										<TableRow key={row.id} data-state={row.getIsSelected() && "selected"} className="h-[40px]">
+											{row.getVisibleCells().map((cell) => (
+												<TableCell className="py-[0px]" key={cell.id}>
+													{flexRender(cell.column.columnDef.cell, cell.getContext())}
+												</TableCell>
+											))}
+										</TableRow>
+									))
+								) : (
+									<TableRow>
+										<TableCell colSpan={columns.length} className="h-24 text-center">
+											Нет данных
+										</TableCell>
+									</TableRow>
+								)}
+							</TableBody>
+						</Table>
+					</div>
+					<TablePagination
+						table={table}
+						pageIndex={pagination.pageIndex}
+						setPageIndex={(pageIndex) => {
+							setPagination((prev) => ({
+								...prev,
+								pageIndex: pageIndex,
+							}))
+						}}
+					/>
+				</div>
+			)}
+		</div>
+	)
+}

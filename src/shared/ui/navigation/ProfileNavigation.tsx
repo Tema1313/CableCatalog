@@ -1,3 +1,4 @@
+import { useAuth } from "@/shared/auth/hooks/useAuth";
 import {
 	NavigationMenu,
 	NavigationMenuContent,
@@ -12,13 +13,18 @@ import type { FC } from "react";
 interface IProfileNavigationProps {}
 
 export const ProfileNavigation: FC<IProfileNavigationProps> = (props) => {
+	const auth = useAuth();
+
 	return (
 		<NavigationMenu>
 			<NavigationMenuList>
 				<NavigationMenuItem>
 					<NavigationMenuTrigger>Пользователь</NavigationMenuTrigger>
 					<NavigationMenuContent>
-						<NavigationMenuLink className="align-middle flex flex-row cursor-pointer ">
+						<NavigationMenuLink
+							onClick={() => auth.resetLogin()}
+							className="align-middle flex flex-row cursor-pointer "
+						>
 							<LogOut /> Выход
 						</NavigationMenuLink>
 					</NavigationMenuContent>

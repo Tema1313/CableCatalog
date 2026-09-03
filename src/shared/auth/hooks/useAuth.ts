@@ -5,21 +5,21 @@ import type { IAuth } from "../model";
 export const useAuth = create<IAuth>()(
     persist(
         (set) => ({
-            userName: null,
+            login: null,
             isLoggedIn: false,
-            login: (userName) => set({
-                userName: userName,
+            setLogin: (userName) => set({
+                login: userName,
                 isLoggedIn: true
             }),
-            logout: () => set({
-                userName: null,
+            resetLogin: () => set({
+                login: null,
                 isLoggedIn: false
             })
         }),
         {
             name: 'user-storage',
             partialize: (state) => ({
-                userName: state.userName,
+                userName: state.setLogin,
                 isLoggedIn: state.isLoggedIn
             })
         }

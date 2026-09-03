@@ -1,8 +1,8 @@
 export interface IAuth {
-    userName: string | null
+    login: string | null
     isLoggedIn: boolean
-    login: (userName: string) => void
-    logout: () => void
+    setLogin: (userName: string) => void
+    resetLogin: () => void
     // какие-то более поелезные данные для аутентификации - токены и тд
 }
 
