@@ -80,25 +80,28 @@ export const TablePagination = <T,>({ table, setPageIndex, pageIndex, centerButt
 						</Button>
 					</PaginationItem>
 
-					{paginationRange.map((pageNumber, index) =>
-						pageNumber === PAGINATION_ELLIPSIS ? (
-							<PaginationItem key={`ellipsis-${index}`}>
-								<PaginationEllipsis />
-							</PaginationItem>
-						) : (
-							<PaginationItem key={`page-${pageNumber}`}>
-								<PaginationLink
-									className="cursor-pointer"
-									onClick={() => {
-										const currentIndex = pageNumber - 1
-										setPageIndex(currentIndex)
-									}}
-									isActive={currentPageIndex === pageNumber - 1}
-								>
-									{pageNumber}
-								</PaginationLink>
-							</PaginationItem>
-						),
+					{paginationRange.map((pageNumber, index) => {
+						return (
+							pageNumber === PAGINATION_ELLIPSIS ? (
+								<PaginationItem key={`ellipsis-${index}`}>
+									<PaginationEllipsis />
+								</PaginationItem>
+							) : (
+								<PaginationItem key={`page-${pageNumber}`}>
+									<PaginationLink
+										className="cursor-pointer"
+										onClick={() => {
+											const currentIndex = pageNumber - 1
+											setPageIndex(currentIndex)
+										}}
+										isActive={currentPageIndex === pageNumber - 1}
+									>
+										{pageNumber}
+									</PaginationLink>
+								</PaginationItem>
+							)
+						)
+					}
 					)}
 
 					<PaginationItem>

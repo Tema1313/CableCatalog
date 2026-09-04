@@ -76,7 +76,7 @@ export const Colors: FC<IColorsProps> = (props) => {
 		{
 			id: "delete",
 			enableHiding: false,
-			cell: ({ row }) => (
+			cell: () => (
 				<Warning
 					actionClick={() => {
 						reqSim(() => {
