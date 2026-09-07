@@ -10,8 +10,8 @@ export const AppLayout: FC<IAppLayoutProps> = (props) => {
 	const auth = useAuth();
 	return (
 		<div className="flex h-screen flex-col">
-			<header className="h-16 border-b flex items-center content-center px-6 bg-sidebar">
-				<div className="font-extrabold text-xl">CSS Modules</div>
+			<header className="h-16 border-b flex items-center content-center px-4 bg-sidebar">
+				<div className="font-extrabold text-xl">Test Project</div>
 				{auth.isLoggedIn && <Navigation />}
 			</header>
 			<div className="flex flex-1 overflow-hidden">

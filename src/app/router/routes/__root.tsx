@@ -1,7 +1,8 @@
-import { ThemeProvider } from "@/app/providers/theme-provider";
-import { Auth } from "@/shared/auth/ui/Auth";
-import { AppLayout } from "@/shared/ui/layouts/AppLayout";
-import { createRootRoute, Outlet } from "@tanstack/react-router";
+import { ThemeProvider } from "@/app/providers/theme-provider"
+import { FiltersSchema } from "@/pages/cableProducts/ui/Filters"
+import { Auth } from "@/shared/auth/ui/Auth"
+import { AppLayout } from "@/shared/ui/layouts/AppLayout"
+import { createRootRoute, Outlet } from "@tanstack/react-router"
 
 const RootLayout = () => {
 	return (
@@ -12,7 +13,10 @@ const RootLayout = () => {
 				</Auth>
 			</AppLayout>
 		</ThemeProvider>
-	);
-};
+	)
+}
 
-export const Route = createRootRoute({ component: RootLayout });
+export const Route = createRootRoute({
+	component: RootLayout,
+	validateSearch: FiltersSchema,
+})

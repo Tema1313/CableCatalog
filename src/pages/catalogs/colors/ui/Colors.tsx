@@ -8,8 +8,8 @@ import {
 	TableHeaderSortCell,
 	TableRow,
 } from "@/shared/components/ui/table"
-import type { IColor } from "@/shared/data/model"
-import { colorsDTO } from "@/shared/data/testdata"
+import type { IColor } from "@/shared/api/model"
+import { colorsDTO } from "@/shared/api/testdata"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
 import {
 	type ColumnDef,

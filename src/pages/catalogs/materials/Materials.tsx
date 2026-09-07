@@ -1,11 +1,29 @@
 import { Button } from "@/shared/components/ui/button"
 import { Input } from "@/shared/components/ui/input"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableHeaderSortCell, TableRow } from "@/shared/components/ui/table"
+import {
+	Table,
+	TableBody,
+	TableCell,
+	TableHead,
+	TableHeader,
+	TableHeaderSortCell,
+	TableRow,
+} from "@/shared/components/ui/table"
 import { TablePagination } from "@/shared/components/ui/table-pagination"
-import type { IMaterial } from "@/shared/data/model"
-import { materialsDTO } from "@/shared/data/testdata"
+import type { IMaterial } from "@/shared/api/model"
+import { materialsDTO } from "@/shared/api/testdata"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
-import { flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable, type ColumnDef, type ColumnFiltersState, type SortingState } from "@tanstack/react-table"
+import {
+	flexRender,
+	getCoreRowModel,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	useReactTable,
+	type ColumnDef,
+	type ColumnFiltersState,
+	type SortingState,
+} from "@tanstack/react-table"
 import { Loader2, RefreshCcw, Trash } from "lucide-react"
 import type { FC } from "react"
 import React, { useEffect, useState } from "react"
@@ -15,8 +33,7 @@ import { Warning } from "@/shared/components/controls/warning"
 import { toast } from "sonner"
 import { UpdateMaterial } from "./UpdateMaterial"
 
-
-interface IMaterialsProps { }
+interface IMaterialsProps {}
 
 export const Materials: FC<IMaterialsProps> = (props) => {
 	const [materials, setMaterials] = useState<IMaterial[]>([])
@@ -59,12 +76,15 @@ export const Materials: FC<IMaterialsProps> = (props) => {
 			id: "delete",
 			enableHiding: false,
 			cell: ({ row }) => (
-				<Warning actionClick={() => {
-					reqSim(() => {
-						console.log(row)
-						toast("Technichal problems")
-					})
-				}} actionTitle="Удалить">
+				<Warning
+					actionClick={() => {
+						reqSim(() => {
+							console.log(row)
+							toast("Technichal problems")
+						})
+					}}
+					actionTitle="Удалить"
+				>
 					<Button variant="link" className="cursor-pointer">
 						<Trash className="ml-2 h-4 w-4 " color="red" />
 					</Button>

@@ -1,4 +1,4 @@
-import type { RgbColor } from "@/shared/data/model";
+import type { RgbColor } from "@/shared/api/model";
 
 export const getRgb = (rgb: string): RgbColor | null => {
     const match = rgb.match(/^rgb\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*\)$/)

@@ -1,10 +1,4 @@
-import type { IColor, RgbColor } from "@/shared/data/model"
-import { zodResolver } from "@hookform/resolvers/zod"
-import { useState, type FC } from "react"
-import { useForm } from "react-hook-form"
-import z, { type ZodType } from "zod"
-import { getRgb } from "./utils/getRgb"
-import { toast } from "sonner"
+import { Button } from "@/shared/components/ui/button"
 import {
 	Dialog,
 	DialogClose,
@@ -15,18 +9,21 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/shared/components/ui/dialog"
-import { Button } from "@/shared/components/ui/button"
-import { Loader2, Pencil } from "lucide-react"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
 import { Input } from "@/shared/components/ui/input"
-import { RgbColorPicker } from "react-colorful"
+import type { RgbColor } from "@/shared/api/model"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { Loader2, Plus } from "lucide-react"
+import { useState, type FC } from "react"
+import { RgbColorPicker } from "react-colorful"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import z, { type ZodType } from "zod"
 
-interface IUpdateColorProps {
-	color: IColor
-}
+interface ICreateColorProps {}
 
-const UpdateColorSchema = z.object({
+const CreateColorSchema = z.object({
 	name: z.string({ message: "Обязательное поле" }).min(1, { message: "Обязательное поле" }),
 	comment: z.string().optional(),
 	color: z.object({
@@ -36,29 +33,26 @@ const UpdateColorSchema = z.object({
 	}) satisfies ZodType<RgbColor>,
 })
 
-type UpdateColorFormData = z.infer<typeof UpdateColorSchema>
+type CreateColorFormData = z.infer<typeof CreateColorSchema>
 
-export const UpdateColor: FC<IUpdateColorProps> = (props) => {
+export const CreateColor: FC<ICreateColorProps> = (props) => {
 	const [open, setOpen] = useState<boolean>(false)
-	const rgb = getRgb(props.color.grb)
 	const [loading, reqSim] = useRequestSimulation()
 
-	const form = useForm<UpdateColorFormData>({
+	const form = useForm<CreateColorFormData>({
 		mode: "onSubmit",
 		reValidateMode: "onChange",
-		resolver: zodResolver(UpdateColorSchema),
+		resolver: zodResolver(CreateColorSchema),
 		defaultValues: {
 			color: {
-				r: rgb?.r,
-				g: rgb?.g,
-				b: rgb?.b,
+				r: 0,
+				g: 0,
+				b: 0,
 			},
-			comment: props.color.comment || undefined,
-			name: props.color.name || "",
 		},
 	})
 
-	const onSubmit = (data: UpdateColorFormData) => {
+	const onSubmit = (data: CreateColorFormData) => {
 		reqSim(() => {
 			console.log(data)
 			toast("Technichal problems", {
@@ -77,13 +71,13 @@ export const UpdateColor: FC<IUpdateColorProps> = (props) => {
 			}}
 		>
 			<DialogTrigger title="Редактировать" className="cursor-pointer" asChild>
-				<Button variant="link" className="ml-auto text-blue-500 cursor-pointer">
-					<Pencil className="ml-2 h-4 w-4" />
+				<Button size="sm" variant="ghost" className="ml-auto green" title="Добавить">
+					<Plus color="#4082b7" />
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader className="gap-0">
-					<DialogTitle>Редактирование цвета</DialogTitle>
+					<DialogTitle>Добавить цвет</DialogTitle>
 					<DialogDescription />
 				</DialogHeader>
 				<div>
@@ -183,17 +177,7 @@ export const UpdateColor: FC<IUpdateColorProps> = (props) => {
 							/>
 							<DialogFooter>
 								<DialogClose asChild>
-									<Button
-										variant="outline"
-										className="cursor-pointer"
-										onClick={() => {
-											setOpen(false)
-											form.reset()
-										}}
-										size={"sm"}
-										type="button"
-										disabled={loading}
-									>
+									<Button disabled={loading} size={"sm"} className="cursor-pointer" variant="outline">
 										Отменить
 									</Button>
 								</DialogClose>
