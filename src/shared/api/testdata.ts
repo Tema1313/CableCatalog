@@ -1,4 +1,4 @@
-import type { ICabel, ICabelType, IColor, IMaterial } from "./model";
+import type { ICable, ICableType, IColor, IMaterial } from "./model";
 
 const colorsDTO: IColor[] = [
     { id: 1, name: 'Красный', grb: 'rgb(255,0,0)', comment: 'Яркий, привлекающий внимание', date: '2026-01-15' },
@@ -46,12 +46,12 @@ const materialsDTO: IMaterial[] = [
     { id: 20, name: 'Керамика', comment: 'Обожженная глина, хрупкая', date: '2026-02-03' }
 ];
 
-const cabelTypeDTO: ICabelType[] = [
+const cableTypeDTO: ICableType[] = [
     { id: 1, name: "Оптический" },
     { id: 2, name: "Медный" }
 ]
 
-const cabelsDTO: ICabel[] = [
+const cablesDTO: ICable[] = [
     {
         id: 1,
         name: "Кабель оптический магистральный одномодовый с центральной трубкой, бронированный стальной проволокой, для прокладки в грунт",
@@ -274,4 +274,4 @@ const cabelsDTO: ICabel[] = [
     },
 ];
 
-export { colorsDTO, materialsDTO, cabelsDTO, cabelTypeDTO }
+export { colorsDTO, materialsDTO, cablesDTO, cableTypeDTO }

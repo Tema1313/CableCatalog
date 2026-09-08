@@ -13,7 +13,7 @@ interface IMaterial {
     date?: string
 }
 
-interface ICabelType {
+interface ICableType {
     id?: number
     name?: string
 }
@@ -24,7 +24,7 @@ interface RgbColor {
     b: number;
 }
 
-interface ICabel {
+interface ICable {
     id?: number
     name?: string
     shortName?: string
@@ -36,4 +36,4 @@ interface ICabel {
     materialId?: number
 }
 
-export type { IColor, IMaterial, RgbColor, ICabel, ICabelType }
+export type { IColor, IMaterial, RgbColor, ICable, ICableType }

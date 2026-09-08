@@ -9,8 +9,8 @@ import {
 } from "@/shared/components/ui/combobox"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
 import { Input } from "@/shared/components/ui/input"
-import type { ICabelType, IColor, IMaterial } from "@/shared/api/model"
-import { cabelTypeDTO, colorsDTO, materialsDTO } from "@/shared/api/testdata"
+import type { ICableType, IColor, IMaterial } from "@/shared/api/model"
+import { cableTypeDTO, colorsDTO, materialsDTO } from "@/shared/api/testdata"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate, useSearch } from "@tanstack/react-router"
@@ -46,11 +46,11 @@ export const Filters: FC<IFiltersProps> = (props) => {
 	})
 	const [materialsList, setMaterialsList] = useState<IMaterial[]>([])
 	const [colorsList, setColorsList] = useState<IColor[]>([])
-	const [cabelTypeList, setCabelTypeList] = useState<ICabelType[]>([])
+	const [cableTypeList, setCableTypeList] = useState<ICableType[]>([])
 
 	const materials: IMaterial[] = [{ id: -1, name: "Все" }, ...materialsList]
 	const colors: IColor[] = [{ id: -1, name: "Все" }, ...colorsList]
-	const cabelTypes: ICabelType[] = [{ id: -1, name: "Все" }, ...cabelTypeList]
+	const cableTypes: ICableType[] = [{ id: -1, name: "Все" }, ...cableTypeList]
 
 	const form = useForm<FilterFormData>({
 		mode: "onSubmit",
@@ -81,7 +81,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 		reqSim(() => {
 			setMaterialsList(materialsDTO)
 			setColorsList(colorsDTO)
-			setCabelTypeList(cabelTypeDTO)
+			setCableTypeList(cableTypeDTO)
 		})
 	}, [])
 
@@ -208,7 +208,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 
 							return (
 								<FormItem>
-									<FormLabel>Тип</FormLabel>
+									<FormLabel>Материал</FormLabel>
 									<Combobox
 										value={field.value ? String(field.value) : undefined}
 										onValueChange={(val) => {
@@ -275,7 +275,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 							const selectedCableType =
 								field.value === "-1"
 									? { id: "-1", name: "Все" }
-									: cabelTypes.find((cabelType) => String(cabelType.id) === String(field.value))
+									: cableTypes.find((cableType) => String(cableType.id) === String(field.value))
 
 							return (
 								<FormItem>
@@ -289,7 +289,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 												cableType: "",
 											}))
 										}}
-										items={cabelTypes}
+										items={cableTypes}
 									>
 										<ComboboxInput
 											value={search.cableType || selectedCableType?.name || ""}
@@ -314,7 +314,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 											<ComboboxEmpty>Элементы не найдены</ComboboxEmpty>
 
 											<ComboboxList>
-												{(item: ICabelType) => (
+												{(item: ICableType) => (
 													<ComboboxItem
 														key={item.id}
 														value={String(item.id)}

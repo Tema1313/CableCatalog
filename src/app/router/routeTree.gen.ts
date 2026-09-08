@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CableProductCableProductIdRouteImport } from './routes/cableProduct.$cableProductId'
 import { Route as CatalogsColorsRouteImport } from './routes/catalogs/colors'
 import { Route as CatalogsMaterialsRouteImport } from './routes/catalogs/materials'
 
@@ -18,6 +19,12 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CableProductCableProductIdRoute =
+  CableProductCableProductIdRouteImport.update({
+    id: '/cableProduct/$cableProductId',
+    path: '/cableProduct/$cableProductId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const CatalogsColorsRoute = CatalogsColorsRouteImport.update({
   id: '/catalogs/colors',
   path: '/catalogs/colors',
@@ -31,30 +38,47 @@ const CatalogsMaterialsRoute = CatalogsMaterialsRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/cableProduct/$cableProductId': typeof CableProductCableProductIdRoute
   '/catalogs/colors': typeof CatalogsColorsRoute
   '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/cableProduct/$cableProductId': typeof CableProductCableProductIdRoute
   '/catalogs/colors': typeof CatalogsColorsRoute
   '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/cableProduct/$cableProductId': typeof CableProductCableProductIdRoute
   '/catalogs/colors': typeof CatalogsColorsRoute
   '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/catalogs/colors' | '/catalogs/materials'
+  fullPaths:
+    | '/'
+    | '/cableProduct/$cableProductId'
+    | '/catalogs/colors'
+    | '/catalogs/materials'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/catalogs/colors' | '/catalogs/materials'
-  id: '__root__' | '/' | '/catalogs/colors' | '/catalogs/materials'
+  to:
+    | '/'
+    | '/cableProduct/$cableProductId'
+    | '/catalogs/colors'
+    | '/catalogs/materials'
+  id:
+    | '__root__'
+    | '/'
+    | '/cableProduct/$cableProductId'
+    | '/catalogs/colors'
+    | '/catalogs/materials'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CableProductCableProductIdRoute: typeof CableProductCableProductIdRoute
   CatalogsColorsRoute: typeof CatalogsColorsRoute
   CatalogsMaterialsRoute: typeof CatalogsMaterialsRoute
 }
@@ -66,6 +90,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cableProduct/$cableProductId': {
+      id: '/cableProduct/$cableProductId'
+      path: '/cableProduct/$cableProductId'
+      fullPath: '/cableProduct/$cableProductId'
+      preLoaderRoute: typeof CableProductCableProductIdRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalogs/colors': {
@@ -87,6 +118,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CableProductCableProductIdRoute: CableProductCableProductIdRoute,
   CatalogsColorsRoute: CatalogsColorsRoute,
   CatalogsMaterialsRoute: CatalogsMaterialsRoute,
 }
