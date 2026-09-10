@@ -10,8 +10,6 @@ import {
 	TableRow,
 } from "@/shared/components/ui/table"
 import { TablePagination } from "@/shared/components/ui/table-pagination"
-import type { IMaterial } from "@/shared/api/model"
-import { materialsDTO } from "@/shared/api/testdata"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
 import {
 	flexRender,
@@ -28,15 +26,17 @@ import { Loader2, RefreshCcw, Trash } from "lucide-react"
 import type { FC } from "react"
 import React, { useEffect, useState } from "react"
 import DateObject from "react-date-object"
-import { CreateMaterial } from "./CreateMaterial"
 import { Warning } from "@/shared/components/controls/warning"
 import { toast } from "sonner"
-import { UpdateMaterial } from "./UpdateMaterial"
+import type { ICoatType } from "@/shared/api/model"
+import { catCoatTypes } from "@/shared/api/testdata"
+import { UpdateCoat } from "./UpdateCoat"
+import { CreateCoat } from "./CreateCoat"
 
-interface IMaterialsProps {}
+interface ICoatsProps {}
 
-export const Materials: FC<IMaterialsProps> = (props) => {
-	const [materials, setMaterials] = useState<IMaterial[]>([])
+export const Coats: FC<ICoatsProps> = (props) => {
+	const [coats, setCoats] = useState<ICoatType[]>([])
 	const [sorting, setSorting] = React.useState<SortingState>([])
 	const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
 	const [pagination, setPagination] = React.useState({
@@ -47,11 +47,11 @@ export const Materials: FC<IMaterialsProps> = (props) => {
 
 	useEffect(() => {
 		reqSim(() => {
-			setMaterials(materialsDTO)
+			setCoats(catCoatTypes)
 		}, 2000)
 	}, [])
 
-	const columns: ColumnDef<IMaterial>[] = [
+	const columns: ColumnDef<ICoatType>[] = [
 		{
 			accessorKey: "name",
 			header: ({ column }) => <TableHeaderSortCell title="Материал" {...column} />,
@@ -64,13 +64,13 @@ export const Materials: FC<IMaterialsProps> = (props) => {
 			accessorKey: "date",
 			header: ({ column }) => <TableHeaderSortCell title="Дата модификации" {...column} />,
 			cell: ({ row }) => {
-				return <div>{new DateObject(row.getValue<IMaterial["date"]>("date") || "").format("DD.MM.YYYY")}</div>
+				return <div>{new DateObject(row.getValue<ICoatType["date"]>("date") || "").format("DD.MM.YYYY")}</div>
 			},
 		},
 		{
 			id: "update",
 			enableHiding: false,
-			cell: ({ row }) => <UpdateMaterial material={row.original} />,
+			cell: ({ row }) => <UpdateCoat coat={row.original} />,
 		},
 		{
 			id: "delete",
@@ -80,10 +80,10 @@ export const Materials: FC<IMaterialsProps> = (props) => {
 					actionClick={() => {
 						reqSim(() => {
 							console.log(row)
-							toast("Technichal problems")
+							toast("Technichal problemeows")
 						})
 					}}
-					actionTitle="Удалить"
+					actionTitle="Delete"
 				>
 					<Button variant="link" className="cursor-pointer">
 						<Trash className="ml-2 h-4 w-4 " color="red" />
@@ -94,7 +94,7 @@ export const Materials: FC<IMaterialsProps> = (props) => {
 	]
 
 	const table = useReactTable({
-		data: materials,
+		data: coats,
 		columns,
 		state: {
 			sorting,
@@ -112,13 +112,13 @@ export const Materials: FC<IMaterialsProps> = (props) => {
 	return (
 		<div className="m-4">
 			<div className="flex justify-between content-center">
-				<div className="mb-3 text-xl font-bold">Материалы</div>
+				<div className="mb-3 text-xl font-bold">Виды шерсток</div>
 				<div className="flex">
 					<div>
 						<Button
 							onClick={() => {
 								reqSim(() => {
-									setMaterials(materialsDTO)
+									setCoats(catCoatTypes)
 								}, 2000)
 							}}
 							size="sm"
@@ -129,13 +129,13 @@ export const Materials: FC<IMaterialsProps> = (props) => {
 							<RefreshCcw color="#4082b7" />
 						</Button>
 					</div>
-					<CreateMaterial />
+					<CreateCoat />
 				</div>
 			</div>
 			<div className="flex items-center pb-2 w-full">
 				<Input
 					className="w-full bg-card h-9"
-					placeholder={"Поиск по наименованию"}
+					placeholder={"Поиск по наименованию шёрсточки..."}
 					onChange={(event) => {
 						setColumnFilters(() => {
 							return [{ id: "name", value: event.target.value }]
@@ -185,7 +185,7 @@ export const Materials: FC<IMaterialsProps> = (props) => {
 									) : (
 										<TableRow>
 											<TableCell colSpan={columns.length} className="h-24 text-center">
-												Нет данных
+												Нет шёрсточек...
 											</TableCell>
 										</TableRow>
 									)}

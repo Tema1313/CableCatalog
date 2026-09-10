@@ -9,7 +9,6 @@ import {
 	TableRow,
 } from "@/shared/components/ui/table"
 import type { IColor } from "@/shared/api/model"
-import { colorsDTO } from "@/shared/api/testdata"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
 import {
 	type ColumnDef,
@@ -29,6 +28,7 @@ import { Warning } from "@/shared/components/controls/warning"
 import { toast } from "sonner"
 import { TablePagination } from "@/shared/components/ui/table-pagination"
 import { CreateColor } from "./CreateColor"
+import { catColors } from "@/shared/api/testdata"
 
 export interface IColorsProps {}
 
@@ -38,7 +38,7 @@ export const Colors: FC<IColorsProps> = (props) => {
 
 	useEffect(() => {
 		reqSim(() => {
-			setColors(colorsDTO)
+			setColors(catColors)
 		}, 2000)
 	}, [])
 
@@ -54,7 +54,7 @@ export const Colors: FC<IColorsProps> = (props) => {
 			header: ({ column }) => <TableHeaderSortCell title="Цвет" {...column} />,
 		},
 		{
-			accessorKey: "grb",
+			accessorKey: "rgb",
 			header: ({ column }) => <TableHeaderSortCell title="Цвет(rgb)" {...column} />,
 		},
 		{
@@ -80,7 +80,7 @@ export const Colors: FC<IColorsProps> = (props) => {
 				<Warning
 					actionClick={() => {
 						reqSim(() => {
-							console.log("trying to delete the element...")
+							console.log("trying to delete the color...")
 							toast("Error delete")
 						})
 					}}
@@ -110,14 +110,14 @@ export const Colors: FC<IColorsProps> = (props) => {
 	return (
 		<div className="m-4">
 			<div className="flex justify-between content-center">
-				<div className="mb-3 text-xl font-bold">Цвета</div>
+				<div className="mb-3 text-xl font-bold">Цвета котиков</div>
 				<div className="flex">
 					<div>
 						<Button
 							onClick={() => {
 								// Если бы использовался tanstack-query, то  тут можно было бы просто инвалидировать запрос
 								reqSim(() => {
-									setColors(colorsDTO)
+									setColors(catColors)
 								}, 2000)
 							}}
 							size="sm"

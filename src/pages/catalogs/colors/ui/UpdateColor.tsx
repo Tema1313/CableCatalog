@@ -40,8 +40,9 @@ type UpdateColorFormData = z.infer<typeof UpdateColorSchema>
 
 export const UpdateColor: FC<IUpdateColorProps> = (props) => {
 	const [open, setOpen] = useState<boolean>(false)
-	const rgb = getRgb(props.color.grb)
 	const [loading, reqSim] = useRequestSimulation()
+
+	const rgb = getRgb(props.color.rgb || "")
 
 	const form = useForm<UpdateColorFormData>({
 		mode: "onSubmit",

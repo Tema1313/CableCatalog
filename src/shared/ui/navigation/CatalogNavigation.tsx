@@ -1,9 +1,7 @@
 import {
-	NavigationMenu,
 	NavigationMenuContent,
 	NavigationMenuItem,
 	NavigationMenuLink,
-	NavigationMenuList,
 	NavigationMenuTrigger,
 } from "@/shared/components/ui/navigation-menu"
 import { useNavigate, type FileRoutesByPath } from "@tanstack/react-router"
@@ -15,7 +13,8 @@ export const CatalogNavigation: FC<ICatalogNavigayionProps> = (props) => {
 	const navigate = useNavigate()
 	const menu: { title: string; url: keyof FileRoutesByPath }[] = [
 		{ title: "Цвета", url: "/catalogs/colors" },
-		{ title: "Материалы", url: "/catalogs/materials" },
+		{ title: "Породы", url: "/catalogs/breeds" },
+		{ title: "Шёрстки", url: "/catalogs/coats" },
 	]
 
 	return (

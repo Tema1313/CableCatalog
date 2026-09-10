@@ -1,3 +1,5 @@
+import type { ICatBreedType, ICatLocationType, ICoatType, IColor } from "@/shared/api/model"
+import { catBreeds, catCoatTypes, catColors, catLocationType } from "@/shared/api/testdata"
 import { Button } from "@/shared/components/ui/button"
 import {
 	Combobox,
@@ -9,8 +11,6 @@ import {
 } from "@/shared/components/ui/combobox"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
 import { Input } from "@/shared/components/ui/input"
-import type { ICableType, IColor, IMaterial } from "@/shared/api/model"
-import { cableTypeDTO, colorsDTO, materialsDTO } from "@/shared/api/testdata"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useNavigate, useSearch } from "@tanstack/react-router"
@@ -22,10 +22,11 @@ interface IFiltersProps {}
 
 export const FiltersSchema = z.object({
 	name: z.string().optional().catch(undefined),
-	cableTypeId: z.union([z.string(), z.number()]).optional(),
 	shortName: z.string().optional().catch(undefined),
+	catTypeId: z.union([z.string(), z.number()]).optional(),
 	colorId: z.union([z.string(), z.number()]).optional(),
-	materialId: z.union([z.string(), z.number()]).optional(),
+	breedId: z.union([z.string(), z.number()]).optional(),
+	coatId: z.union([z.string(), z.number()]).optional(),
 })
 
 export type FilterFormData = z.infer<typeof FiltersSchema>
@@ -37,20 +38,24 @@ export const Filters: FC<IFiltersProps> = (props) => {
 
 	const [search, setSearch] = useState<{
 		color: string
-		cableType: string
-		material: string
+		catType: string
+		coat: string
+		breed: string
 	}>({
 		color: "",
-		cableType: "",
-		material: "",
+		catType: "",
+		breed: "",
+		coat: "",
 	})
-	const [materialsList, setMaterialsList] = useState<IMaterial[]>([])
+	const [breedsList, setBreedsList] = useState<ICatBreedType[]>([])
 	const [colorsList, setColorsList] = useState<IColor[]>([])
-	const [cableTypeList, setCableTypeList] = useState<ICableType[]>([])
+	const [catsTypeList, setCatsTypeList] = useState<ICatLocationType[]>([])
+	const [coatsList, setCoatsList] = useState<ICoatType[]>([])
 
-	const materials: IMaterial[] = [{ id: -1, name: "Все" }, ...materialsList]
+	const breeds: ICatBreedType[] = [{ id: -1, name: "Все" }, ...breedsList]
 	const colors: IColor[] = [{ id: -1, name: "Все" }, ...colorsList]
-	const cableTypes: ICableType[] = [{ id: -1, name: "Все" }, ...cableTypeList]
+	const catsTypes: ICatLocationType[] = [{ id: -1, name: "Все" }, ...catsTypeList]
+	const coats: ICoatType[] = [{ id: -1, name: "Все" }, ...coatsList]
 
 	const form = useForm<FilterFormData>({
 		mode: "onSubmit",
@@ -58,40 +63,44 @@ export const Filters: FC<IFiltersProps> = (props) => {
 		resolver: zodResolver(FiltersSchema),
 		defaultValues: {
 			name: searchParams.name ? searchParams.name : "",
-			cableTypeId: searchParams.cableTypeId !== undefined ? String(searchParams.cableTypeId) : "-1",
-			colorId: searchParams.colorId !== undefined ? String(searchParams.colorId) : "-1",
-			materialId: searchParams.materialId !== undefined ? String(searchParams.materialId) : "-1",
 			shortName: searchParams.shortName ? searchParams.shortName : "",
+			catTypeId: searchParams.catTypeId !== undefined ? String(searchParams.catTypeId) : "-1",
+			colorId: searchParams.colorId !== undefined ? String(searchParams.colorId) : "-1",
+			breedId: searchParams.breedId !== undefined ? String(searchParams.breedId) : "-1",
+			coatId: searchParams.coatId !== undefined ? String(searchParams.coatId) : "-1",
 		},
 	})
 
 	const onSubmit = (data: FilterFormData) => {
 		navigate({
 			search: () => ({
-				materialId: data.materialId !== "-1" ? Number(data.materialId) : undefined,
-				colorId: data.colorId !== "-1" ? Number(data.colorId) : undefined,
 				name: data.name ? data.name : undefined,
 				shortName: data.shortName ? data.shortName : undefined,
-				cableTypeId: data.cableTypeId !== "-1" ? Number(data.cableTypeId) : undefined,
+				catTypeId: data.catTypeId !== "-1" ? Number(data.catTypeId) : undefined,
+				colorId: data.colorId !== "-1" ? Number(data.colorId) : undefined,
+				breedId: data.breedId !== "-1" ? Number(data.breedId) : undefined,
+				coatId: data.coatId !== "-1" ? Number(data.coatId) : undefined,
 			}),
 		})
 	}
 
 	useEffect(() => {
 		reqSim(() => {
-			setMaterialsList(materialsDTO)
-			setColorsList(colorsDTO)
-			setCableTypeList(cableTypeDTO)
+			setBreedsList(catBreeds)
+			setColorsList(catColors)
+			setCatsTypeList(catLocationType)
+			setCoatsList(catCoatTypes)
 		})
 	}, [])
 
 	useEffect(() => {
 		form.reset({
-			cableTypeId: searchParams.cableTypeId !== undefined ? String(searchParams.cableTypeId) : "-1",
-			shortName: searchParams.shortName ? searchParams.shortName : "",
 			name: searchParams.name ? searchParams.name : "",
-			materialId: searchParams.materialId !== undefined ? String(searchParams.materialId) : "-1",
+			shortName: searchParams.shortName ? searchParams.shortName : "",
+			catTypeId: searchParams.catTypeId !== undefined ? String(searchParams.catTypeId) : "-1",
+			breedId: searchParams.breedId !== undefined ? String(searchParams.breedId) : "-1",
 			colorId: searchParams.colorId !== undefined ? String(searchParams.colorId) : "-1",
+			coatId: searchParams.coatId !== undefined ? String(searchParams.coatId) : "-1",
 		})
 	}, [searchParams])
 
@@ -104,7 +113,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 						name="name"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Наименование</FormLabel>
+								<FormLabel>Имя</FormLabel>
 								<FormControl>
 									<Input {...field} />
 								</FormControl>
@@ -117,7 +126,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 						name="shortName"
 						render={({ field }) => (
 							<FormItem>
-								<FormLabel>Короткое наименование</FormLabel>
+								<FormLabel>Короткое имя</FormLabel>
 								<FormControl>
 									<Input {...field} />
 								</FormControl>
@@ -169,7 +178,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 										/>
 
 										<ComboboxContent className="pointer-events-auto" onWheel={(e) => e.stopPropagation()}>
-											<ComboboxEmpty>Элементы не найдены</ComboboxEmpty>
+											<ComboboxEmpty>Цвет не найдены</ComboboxEmpty>
 
 											<ComboboxList>
 												{(item: IColor) => (
@@ -198,40 +207,40 @@ export const Filters: FC<IFiltersProps> = (props) => {
 						}}
 					/>
 					<FormField
-						name="materialId"
+						name="coatId"
 						control={form.control}
 						render={({ field }) => {
-							const selectedMaterial =
+							const selectedCoat =
 								field.value === "-1"
 									? { id: "-1", name: "Все" }
-									: materials.find((material) => String(material.id) === String(field.value))
+									: coats.find((coat) => String(coat.id) === String(field.value))
 
 							return (
 								<FormItem>
-									<FormLabel>Материал</FormLabel>
+									<FormLabel>Шерстка</FormLabel>
 									<Combobox
 										value={field.value ? String(field.value) : undefined}
 										onValueChange={(val) => {
 											field.onChange(val)
 											setSearch((prev) => ({
 												...prev,
-												material: "",
+												coat: "",
 											}))
 										}}
-										items={materials}
+										items={coats}
 									>
 										<ComboboxInput
-											value={search.material || selectedMaterial?.name || ""}
+											value={search.coat || selectedCoat?.name || ""}
 											onChange={(e) =>
 												setSearch((prev) => ({
 													...prev,
-													material: e.target.value,
+													coat: e.target.value,
 												}))
 											}
 											onBlur={(e) => {
 												setSearch((prev) => ({
 													...prev,
-													material: "",
+													coat: "",
 												}))
 												if (!e.target.value) {
 													field.onChange("-1")
@@ -240,10 +249,10 @@ export const Filters: FC<IFiltersProps> = (props) => {
 										/>
 
 										<ComboboxContent className="pointer-events-auto" onWheel={(e) => e.stopPropagation()}>
-											<ComboboxEmpty>Элементы не найдены</ComboboxEmpty>
+											<ComboboxEmpty>Шерстки не найдены</ComboboxEmpty>
 
 											<ComboboxList>
-												{(item: IMaterial) => (
+												{(item: ICoatType) => (
 													<ComboboxItem
 														key={item.id}
 														value={String(item.id)}
@@ -251,7 +260,7 @@ export const Filters: FC<IFiltersProps> = (props) => {
 															field.onChange(String(item.id))
 															setSearch((prev) => ({
 																...prev,
-																material: "",
+																coat: "",
 															}))
 														}}
 														data-selected={String(item.id) === String(field.value)}
@@ -269,40 +278,40 @@ export const Filters: FC<IFiltersProps> = (props) => {
 						}}
 					/>
 					<FormField
-						name="cableTypeId"
+						name="catTypeId"
 						control={form.control}
 						render={({ field }) => {
-							const selectedCableType =
+							const selectedCatType =
 								field.value === "-1"
 									? { id: "-1", name: "Все" }
-									: cableTypes.find((cableType) => String(cableType.id) === String(field.value))
+									: catsTypes.find((catType) => String(catType.id) === String(field.value))
 
 							return (
 								<FormItem>
-									<FormLabel>Тип</FormLabel>
+									<FormLabel>Тип котика</FormLabel>
 									<Combobox
 										value={field.value ? String(field.value) : undefined}
 										onValueChange={(val) => {
 											field.onChange(val)
 											setSearch((prev) => ({
 												...prev,
-												cableType: "",
+												catType: "",
 											}))
 										}}
-										items={cableTypes}
+										items={catsTypes}
 									>
 										<ComboboxInput
-											value={search.cableType || selectedCableType?.name || ""}
+											value={search.catType || selectedCatType?.name || ""}
 											onChange={(e) =>
 												setSearch((prev) => ({
 													...prev,
-													cableType: e.target.value,
+													catType: e.target.value,
 												}))
 											}
 											onBlur={(e) => {
 												setSearch((prev) => ({
 													...prev,
-													cableType: "",
+													catType: "",
 												}))
 												if (!e.target.value) {
 													field.onChange("-1")
@@ -311,10 +320,10 @@ export const Filters: FC<IFiltersProps> = (props) => {
 										/>
 
 										<ComboboxContent className="pointer-events-auto" onWheel={(e) => e.stopPropagation()}>
-											<ComboboxEmpty>Элементы не найдены</ComboboxEmpty>
+											<ComboboxEmpty>{`Такого типа котика не существует(`}</ComboboxEmpty>
 
 											<ComboboxList>
-												{(item: ICableType) => (
+												{(item: ICatLocationType) => (
 													<ComboboxItem
 														key={item.id}
 														value={String(item.id)}
@@ -323,6 +332,77 @@ export const Filters: FC<IFiltersProps> = (props) => {
 															setSearch((prev) => ({
 																...prev,
 																cableType: "",
+															}))
+														}}
+														data-selected={String(item.id) === String(field.value)}
+													>
+														{item.name}
+													</ComboboxItem>
+												)}
+											</ComboboxList>
+										</ComboboxContent>
+									</Combobox>
+
+									<FormMessage />
+								</FormItem>
+							)
+						}}
+					/>
+					<FormField
+						name="breedId"
+						control={form.control}
+						render={({ field }) => {
+							const selectedBreedType =
+								field.value === "-1"
+									? { id: "-1", name: "Все" }
+									: breeds.find((breed) => String(breed.id) === String(field.value))
+
+							return (
+								<FormItem>
+									<FormLabel>Порода</FormLabel>
+									<Combobox
+										value={field.value ? String(field.value) : undefined}
+										onValueChange={(val) => {
+											field.onChange(val)
+											setSearch((prev) => ({
+												...prev,
+												breed: "",
+											}))
+										}}
+										items={breeds}
+									>
+										<ComboboxInput
+											value={search.catType || selectedBreedType?.name || ""}
+											onChange={(e) =>
+												setSearch((prev) => ({
+													...prev,
+													breed: e.target.value,
+												}))
+											}
+											onBlur={(e) => {
+												setSearch((prev) => ({
+													...prev,
+													breed: "",
+												}))
+												if (!e.target.value) {
+													field.onChange("-1")
+												}
+											}}
+										/>
+
+										<ComboboxContent className="pointer-events-auto" onWheel={(e) => e.stopPropagation()}>
+											<ComboboxEmpty>{`Такой породы котика не существует(`}</ComboboxEmpty>
+
+											<ComboboxList>
+												{(item: ICatLocationType) => (
+													<ComboboxItem
+														key={item.id}
+														value={String(item.id)}
+														onSelect={() => {
+															field.onChange(String(item.id))
+															setSearch((prev) => ({
+																...prev,
+																breed: "",
 															}))
 														}}
 														data-selected={String(item.id) === String(field.value)}

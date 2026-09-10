@@ -10,77 +10,89 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as CableProductCableProductIdRouteImport } from './routes/cableProduct.$cableProductId'
+import { Route as CatCatIdRouteImport } from './routes/cat.$catId'
+import { Route as CatalogsBreedsRouteImport } from './routes/catalogs/breeds'
+import { Route as CatalogsCoatsRouteImport } from './routes/catalogs/coats'
 import { Route as CatalogsColorsRouteImport } from './routes/catalogs/colors'
-import { Route as CatalogsMaterialsRouteImport } from './routes/catalogs/materials'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CableProductCableProductIdRoute =
-  CableProductCableProductIdRouteImport.update({
-    id: '/cableProduct/$cableProductId',
-    path: '/cableProduct/$cableProductId',
-    getParentRoute: () => rootRouteImport,
-  } as any)
+const CatCatIdRoute = CatCatIdRouteImport.update({
+  id: '/cat/$catId',
+  path: '/cat/$catId',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogsBreedsRoute = CatalogsBreedsRouteImport.update({
+  id: '/catalogs/breeds',
+  path: '/catalogs/breeds',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CatalogsCoatsRoute = CatalogsCoatsRouteImport.update({
+  id: '/catalogs/coats',
+  path: '/catalogs/coats',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CatalogsColorsRoute = CatalogsColorsRouteImport.update({
   id: '/catalogs/colors',
   path: '/catalogs/colors',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CatalogsMaterialsRoute = CatalogsMaterialsRouteImport.update({
-  id: '/catalogs/materials',
-  path: '/catalogs/materials',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/cableProduct/$cableProductId': typeof CableProductCableProductIdRoute
+  '/cat/$catId': typeof CatCatIdRoute
+  '/catalogs/breeds': typeof CatalogsBreedsRoute
+  '/catalogs/coats': typeof CatalogsCoatsRoute
   '/catalogs/colors': typeof CatalogsColorsRoute
-  '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/cableProduct/$cableProductId': typeof CableProductCableProductIdRoute
+  '/cat/$catId': typeof CatCatIdRoute
+  '/catalogs/breeds': typeof CatalogsBreedsRoute
+  '/catalogs/coats': typeof CatalogsCoatsRoute
   '/catalogs/colors': typeof CatalogsColorsRoute
-  '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/cableProduct/$cableProductId': typeof CableProductCableProductIdRoute
+  '/cat/$catId': typeof CatCatIdRoute
+  '/catalogs/breeds': typeof CatalogsBreedsRoute
+  '/catalogs/coats': typeof CatalogsCoatsRoute
   '/catalogs/colors': typeof CatalogsColorsRoute
-  '/catalogs/materials': typeof CatalogsMaterialsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/cableProduct/$cableProductId'
+    | '/cat/$catId'
+    | '/catalogs/breeds'
+    | '/catalogs/coats'
     | '/catalogs/colors'
-    | '/catalogs/materials'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/cableProduct/$cableProductId'
+    | '/cat/$catId'
+    | '/catalogs/breeds'
+    | '/catalogs/coats'
     | '/catalogs/colors'
-    | '/catalogs/materials'
   id:
     | '__root__'
     | '/'
-    | '/cableProduct/$cableProductId'
+    | '/cat/$catId'
+    | '/catalogs/breeds'
+    | '/catalogs/coats'
     | '/catalogs/colors'
-    | '/catalogs/materials'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CableProductCableProductIdRoute: typeof CableProductCableProductIdRoute
+  CatCatIdRoute: typeof CatCatIdRoute
+  CatalogsBreedsRoute: typeof CatalogsBreedsRoute
+  CatalogsCoatsRoute: typeof CatalogsCoatsRoute
   CatalogsColorsRoute: typeof CatalogsColorsRoute
-  CatalogsMaterialsRoute: typeof CatalogsMaterialsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -92,11 +104,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/cableProduct/$cableProductId': {
-      id: '/cableProduct/$cableProductId'
-      path: '/cableProduct/$cableProductId'
-      fullPath: '/cableProduct/$cableProductId'
-      preLoaderRoute: typeof CableProductCableProductIdRouteImport
+    '/cat/$catId': {
+      id: '/cat/$catId'
+      path: '/cat/$catId'
+      fullPath: '/cat/$catId'
+      preLoaderRoute: typeof CatCatIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogs/breeds': {
+      id: '/catalogs/breeds'
+      path: '/catalogs/breeds'
+      fullPath: '/catalogs/breeds'
+      preLoaderRoute: typeof CatalogsBreedsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/catalogs/coats': {
+      id: '/catalogs/coats'
+      path: '/catalogs/coats'
+      fullPath: '/catalogs/coats'
+      preLoaderRoute: typeof CatalogsCoatsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/catalogs/colors': {
@@ -106,21 +132,15 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CatalogsColorsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/catalogs/materials': {
-      id: '/catalogs/materials'
-      path: '/catalogs/materials'
-      fullPath: '/catalogs/materials'
-      preLoaderRoute: typeof CatalogsMaterialsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CableProductCableProductIdRoute: CableProductCableProductIdRoute,
+  CatCatIdRoute: CatCatIdRoute,
+  CatalogsBreedsRoute: CatalogsBreedsRoute,
+  CatalogsCoatsRoute: CatalogsCoatsRoute,
   CatalogsColorsRoute: CatalogsColorsRoute,
-  CatalogsMaterialsRoute: CatalogsMaterialsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

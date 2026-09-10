@@ -1,13 +1,13 @@
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/shared/components/ui/resizable"
 import type { FC } from "react"
+import { Cats } from "./Cats"
 import { Filters } from "./Filters"
-import { CableProducts } from "./CableProducts"
 
 interface ICableProductsProps {
-	currentCableProductId?: number
+	catId?: number
 }
 
-export const CableProductsLayout: FC<ICableProductsProps> = (props) => {
+export const CatsPageLayout: FC<ICableProductsProps> = (props) => {
 	return (
 		<ResizablePanelGroup direction="horizontal" className="overflow-auto">
 			<ResizablePanel defaultSize={10} maxSize={50}>
@@ -15,7 +15,7 @@ export const CableProductsLayout: FC<ICableProductsProps> = (props) => {
 			</ResizablePanel>
 			<ResizableHandle />
 			<ResizablePanel defaultSize={90} className="relative flex flex-col">
-				<CableProducts currentCableProductId={props.currentCableProductId} />
+				<Cats catId={props.catId} />
 			</ResizablePanel>
 		</ResizablePanelGroup>
 	)

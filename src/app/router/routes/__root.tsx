@@ -1,5 +1,5 @@
 import { ThemeProvider } from "@/app/providers/theme-provider"
-import { FiltersSchema } from "@/pages/cableProducts/ui/Filters"
+import { FiltersSchema } from "@/pages/cats/ui/Filters"
 import { Auth } from "@/shared/auth/ui/Auth"
 import { AppLayout } from "@/shared/ui/layouts/AppLayout"
 import { createRootRoute, Outlet } from "@tanstack/react-router"

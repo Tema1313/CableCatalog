@@ -1,6 +1,6 @@
-import { CableProductsLayout } from "@/pages/cableProducts"
+import { CatsPageLayout } from "@/pages/cats"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/")({
-	component: CableProductsLayout,
+	component: CatsPageLayout,
 })

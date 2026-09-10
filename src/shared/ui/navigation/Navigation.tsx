@@ -25,7 +25,7 @@ export const Navigation: FC<INavigationProps> = (props) => {
 							}}
 							className="align-middle flex flex-row cursor-pointer "
 						>
-							Кабельная продукция
+							Котики
 						</NavigationMenuLink>
 					</NavigationMenuItem>
 					<CatalogNavigation />

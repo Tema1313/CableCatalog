@@ -1,3 +1,4 @@
+import type { ICoatType } from "@/shared/api/model"
 import { Button } from "@/shared/components/ui/button"
 import {
 	Dialog,
@@ -11,7 +12,6 @@ import {
 } from "@/shared/components/ui/dialog"
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/components/ui/form"
 import { Input } from "@/shared/components/ui/input"
-import type { IMaterial } from "@/shared/api/model"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Loader2, Pencil } from "lucide-react"
@@ -20,33 +20,33 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import z from "zod"
 
-interface IUpdateMaterialProps {
-	material: IMaterial
+interface IUpdateCoatProps {
+	coat: ICoatType
 }
 
-const UpdateMaterialSchema = z.object({
+const UpdateCoatSchema = z.object({
 	name: z.string({ message: "Обязательное поле" }).min(1, { message: "Обязательное поле" }),
 })
 
-type UpdateMaterialFormData = z.infer<typeof UpdateMaterialSchema>
+type UpdateCoatFormData = z.infer<typeof UpdateCoatSchema>
 
-export const UpdateMaterial: FC<IUpdateMaterialProps> = (props) => {
+export const UpdateCoat: FC<IUpdateCoatProps> = (props) => {
 	const [open, setOpen] = useState<boolean>(false)
 	const [loading, reqSim] = useRequestSimulation()
 
-	const form = useForm<UpdateMaterialFormData>({
+	const form = useForm<UpdateCoatFormData>({
 		mode: "onSubmit",
 		reValidateMode: "onChange",
-		resolver: zodResolver(UpdateMaterialSchema),
+		resolver: zodResolver(UpdateCoatSchema),
 		defaultValues: {
-			name: props.material.name || "",
+			name: props.coat.name || "",
 		},
 	})
 
-	const onSubmit = (data: UpdateMaterialFormData) => {
+	const onSubmit = (data: UpdateCoatFormData) => {
 		reqSim(() => {
 			console.log(data)
-			toast("Technichal problems")
+			toast("Technichal problemeows")
 		}, 500)
 	}
 
@@ -66,7 +66,7 @@ export const UpdateMaterial: FC<IUpdateMaterialProps> = (props) => {
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader className="gap-0">
-					<DialogTitle>Редактирование материала</DialogTitle>
+					<DialogTitle>Редактирование шерстки</DialogTitle>
 					<DialogDescription />
 				</DialogHeader>
 				<div>
@@ -77,7 +77,7 @@ export const UpdateMaterial: FC<IUpdateMaterialProps> = (props) => {
 								name="name"
 								render={({ field }) => (
 									<FormItem>
-										<FormLabel>Материал</FormLabel>
+										<FormLabel>Шерстка</FormLabel>
 										<FormControl>
 											<Input {...field} />
 										</FormControl>

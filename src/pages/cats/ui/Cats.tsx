@@ -1,7 +1,7 @@
 import { useNavigate, useSearch } from "@tanstack/react-router"
 import { useEffect, useState, type FC } from "react"
 import DateObject from "react-date-object"
-import { useCableProductsStore } from "../model/cableProductsStore"
+import { useCatsStore } from "../model/catsStore"
 import { useUpdateCableProducts } from "../hooks/useUpdateCableProducts"
 import {
 	flexRender,
@@ -21,28 +21,30 @@ import {
 	TableHeaderSortCell,
 	TableRow,
 } from "@/shared/components/ui/table"
-import type { ICable, ICableType, IColor, IMaterial } from "@/shared/api/model"
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "@/shared/components/ui/resizable"
 import { Button } from "@/shared/components/ui/button"
 import { Eraser, Loader2, RefreshCcw, X } from "lucide-react"
 import { Warning } from "@/shared/components/controls/warning"
 import { TablePagination } from "@/shared/components/ui/table-pagination"
-import { CableProductDetailLayout } from "./detail/CableProductDetailLayout"
 import { useRequestSimulation } from "@/shared/hooks/useRequestSimulation"
-import { cableTypeDTO, colorsDTO, materialsDTO } from "@/shared/api/testdata"
+import type { ICat, ICatBreedType, ICatLocationType, ICoatType, IColor } from "@/shared/api/model"
+import { catBreeds, catCoatTypes, catColors, catLocationType } from "@/shared/api/testdata"
+import { CatPersonalInfoLayout } from "./cat-personal-info/CatPersonalInfoLayout"
+import catBread from "@assets/bread-icons/catbread.png"
+import catNotBread from "@assets/bread-icons/nocatbread.png"
 
 interface ICableProductsProps {
-	currentCableProductId?: number
+	catId?: number
 }
 
-export const CableProducts: FC<ICableProductsProps> = (props) => {
+export const Cats: FC<ICableProductsProps> = (props) => {
 	const navigate = useNavigate({ from: "/" })
 	const searchParams = useSearch({ from: "__root__" })
-	const { cableProducts } = useCableProductsStore((store) => store)
+	const { cats: cableProducts } = useCatsStore((store) => store)
 	const { updateCableProductList, isLoading: isCableProsuctsLoading } = useUpdateCableProducts()
 	const [loading, reqSim] = useRequestSimulation()
 
-	const currentCableProduct = cableProducts.find((product) => product.id === props.currentCableProductId)
+	const currentCableProduct = cableProducts.find((product) => product.id === props.catId)
 	const isLoading = isCableProsuctsLoading || loading
 
 	const [sorting, setSorting] = useState<SortingState>([])
@@ -51,16 +53,17 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 		pageSize: 15,
 	})
 
-	const [materialsList, setMaterialsList] = useState<IMaterial[]>([])
+	const [breedsList, setBreedsList] = useState<ICatBreedType[]>([])
 	const [colorsList, setColorsList] = useState<IColor[]>([])
-	const [cableTypeList, setCableTypeList] = useState<ICableType[]>([])
+	const [catsTypeList, setCatsTypeList] = useState<ICatLocationType[]>([])
+	const [coatsList, setCoatsList] = useState<ICoatType[]>([])
 
-	const columns: ColumnDef<ICable>[] = [
+	const columns: ColumnDef<ICat>[] = [
 		{
 			accessorKey: "name",
-			header: ({ column }) => <TableHeaderSortCell title="Наименование" {...column} />,
+			header: ({ column }) => <TableHeaderSortCell title="Имя" {...column} />,
 			cell: ({ row }) => {
-				const value = row.getValue<ICable["name"]>("name")
+				const value = row.getValue<ICat["name"]>("name")
 				return (
 					<div className="max-w-[200px]">
 						<div title={value} className="overflow-hidden text-ellipsis">
@@ -71,11 +74,15 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 			},
 		},
 		{
-			accessorKey: "cableTypeId",
-			header: ({ column }) => <TableHeaderSortCell title="Тип кабеля" {...column} />,
+			accessorKey: "shortName",
+			header: ({ column }) => <TableHeaderSortCell title="Короткое имя" {...column} />,
+		},
+		{
+			accessorKey: "locationTypeId",
+			header: ({ column }) => <TableHeaderSortCell title="Тип котика" {...column} />,
 			cell: ({ row }) => {
 				const value =
-					cableTypeList.find((elem) => elem.id === row.getValue<ICable["cableTypeId"]>("cableTypeId"))?.name ||
+					catsTypeList.find((elem) => elem.id === row.getValue<ICat["locationTypeId"]>("locationTypeId"))?.name ||
 					"Неизвестно"
 				return <div>{value}</div>
 			},
@@ -85,37 +92,67 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 			header: ({ column }) => <TableHeaderSortCell title="Цвет" {...column} />,
 			cell: ({ row }) => {
 				const value =
-					colorsList.find((elem) => elem.id === row.getValue<ICable["colorId"]>("colorId"))?.name || "Неизвестно"
+					colorsList.find((elem) => elem.id === row.getValue<ICat["colorId"]>("colorId"))?.name || "Неизвестно"
 				return <div>{value}</div>
 			},
 		},
 		{
-			accessorKey: "materialId",
-			header: ({ column }) => <TableHeaderSortCell title="Материал" {...column} />,
+			accessorKey: "coatTypeId",
+			header: ({ column }) => <TableHeaderSortCell title="Тип шерстки" {...column} />,
 			cell: ({ row }) => {
 				const value =
-					materialsList.find((elem) => elem.id === row.getValue<ICable["materialId"]>("materialId"))?.name ||
-					"Неизвестно"
+					coatsList.find((elem) => elem.id === row.getValue<ICat["coatTypeId"]>("coatTypeId"))?.name || "Неизвестно"
+				return <div>{value}</div>
+			},
+		},
+		{
+			accessorKey: "breedTypeId",
+			header: ({ column }) => <TableHeaderSortCell title="Порода" {...column} />,
+			cell: ({ row }) => {
+				const value =
+					breedsList.find((elem) => elem.id === row.getValue<ICat["breedTypeId"]>("breedTypeId"))?.name || "Неизвестно"
 				return <div>{value}</div>
 			},
 		},
 		{
 			accessorKey: "mass",
-			header: ({ column }) => <TableHeaderSortCell title="Масса кабеля, кг" {...column} />,
+			header: ({ column }) => <TableHeaderSortCell title="Вес котика" {...column} />,
 		},
 		{
-			accessorKey: "cableProdName",
-			header: ({ column }) => <TableHeaderSortCell title="Производитель" {...column} />,
+			accessorKey: "owner",
+			header: ({ column }) => <TableHeaderSortCell title="Слуга котика" {...column} />,
 		},
 		{
-			accessorKey: "shortName",
-			header: ({ column }) => <TableHeaderSortCell title="Короткое наименование" {...column} />,
+			accessorKey: "bigeyedness",
+			header: ({ column }) => <TableHeaderSortCell title="Большеглазость(от 1 до 10)" {...column} />,
+		},
+		{
+			accessorKey: "breadness",
+			header: ({ column }) => <TableHeaderSortCell title="Хлебобулочность" {...column} />,
+			cell: ({ row }) => {
+				const isBread = row.getValue<ICat["breadness"]>("breadness")
+				return (
+					<div className="flex ">
+						<img src={isBread ? catBread : catNotBread} alt="catbread" className="w-[25px] h-[25px]" />
+					</div>
+				)
+			},
 		},
 		{
 			accessorKey: "date",
-			header: ({ column }) => <TableHeaderSortCell title="Дата модификации" {...column} />,
+			header: ({ column }) => <TableHeaderSortCell title="Дата рождения" {...column} />,
 			cell: ({ row }) => {
-				return <div>{new DateObject(row.getValue<ICable["date"]>("date") || "").format("DD.MM.YYYY")}</div>
+				return <div>{new DateObject(row.getValue<ICat["date"]>("date") || "").format("DD.MM.YYYY")}</div>
+			},
+		},
+		{
+			accessorKey: "stars",
+			header: ({ column }) => <TableHeaderSortCell title="Рейтинг" {...column} />,
+			cell: ({ row }) => {
+				const stars = Array.from({ length: row.getValue<ICat["stars"]>("stars") || 5 }, (_, index) => (
+					<span key={index}>⭐</span>
+				))
+				return <div className="flex">{stars}</div>
 			},
 		},
 	]
@@ -134,9 +171,9 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 	})
 
 	useEffect(() => {
-		if (props.currentCableProductId && cableProducts.length !== 0) {
+		if (props.catId && cableProducts.length !== 0) {
 			const rows = table.getSortedRowModel().rows
-			const idx = rows.findIndex((row) => row.original.id === props.currentCableProductId)
+			const idx = rows.findIndex((row) => row.original.id === props.catId)
 			if (idx !== -1) {
 				const pageIndex = Math.floor(idx / pagination.pageSize)
 				setPagination((prev) => (prev.pageIndex === pageIndex ? prev : { ...prev, pageIndex }))
@@ -148,7 +185,7 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 				})
 			}
 		}
-	}, [props.currentCableProductId, cableProducts])
+	}, [props.catId, cableProducts])
 
 	useEffect(() => {
 		updateCableProductList()
@@ -156,18 +193,19 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 
 	useEffect(() => {
 		reqSim(() => {
-			setMaterialsList(materialsDTO)
-			setColorsList(colorsDTO)
-			setCableTypeList(cableTypeDTO)
+			setBreedsList(catBreeds)
+			setColorsList(catColors)
+			setCatsTypeList(catLocationType)
+			setCoatsList(catCoatTypes)
 		}, 1500)
 	}, [])
 
 	return (
 		<ResizablePanelGroup direction="horizontal">
-			<ResizablePanel defaultSize={props.currentCableProductId ? 20 : 100}>
+			<ResizablePanel defaultSize={props.catId ? 20 : 100}>
 				<div className="m-4">
 					<div className="flex justify-between">
-						<div className="mb-3 text-xl font-bold">Кабельная продукция</div>
+						<div className="mb-3 text-xl font-bold">Котеечная продукция</div>
 						<div className="flex">
 							<Button
 								variant="ghost"
@@ -234,18 +272,16 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 												<TableRow
 													onClick={() => {
 														navigate({
-															to: "/cableProduct/$cableProductId",
+															to: "/cat/$catId",
 															params: {
-																cableProductId: String(row.original.id!),
+																catId: String(row.original.id!),
 															},
 															search: (prev) => prev,
 														})
 													}}
 													key={row.id}
 													data-state={row.getIsSelected() && "selected"}
-													className={`${
-														row.original.id === props.currentCableProductId ? "bg-sky-300" : ""
-													} h-[30px] cursor-pointer `}
+													className={`${row.original.id === props.catId ? "bg-sky-300" : ""} h-[30px] cursor-pointer `}
 												>
 													{row.getVisibleCells().map((cell) => (
 														<TableCell key={cell.id}>
@@ -257,7 +293,7 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 										) : (
 											<TableRow>
 												<TableCell colSpan={columns.length} className="h-24 text-center">
-													Нет данных
+													Нет котиков
 												</TableCell>
 											</TableRow>
 										)}
@@ -282,14 +318,11 @@ export const CableProducts: FC<ICableProductsProps> = (props) => {
 					)}
 				</div>
 			</ResizablePanel>
-			{props.currentCableProductId && (
+			{props.catId && (
 				<>
 					<ResizableHandle />
 					<ResizablePanel defaultSize={80} className="relative flex flex-col">
-						<CableProductDetailLayout
-						// cloneCount={currentCableProduct?.cloneCount || 0}
-						// currentCableProductId={props.currentCableProductId}
-						/>
+						<CatPersonalInfoLayout catId={props.catId} />
 					</ResizablePanel>
 				</>
 			)}

@@ -70,14 +70,14 @@ export const CreateColor: FC<ICreateColorProps> = (props) => {
 				if (!open) form.reset()
 			}}
 		>
-			<DialogTrigger title="Редактировать" className="cursor-pointer" asChild>
+			<DialogTrigger title="Добавление" className="cursor-pointer" asChild>
 				<Button size="sm" variant="ghost" className="ml-auto green" title="Добавить">
 					<Plus color="#4082b7" />
 				</Button>
 			</DialogTrigger>
 			<DialogContent>
 				<DialogHeader className="gap-0">
-					<DialogTitle>Добавить цвет</DialogTitle>
+					<DialogTitle>Добавить цвет котэка</DialogTitle>
 					<DialogDescription />
 				</DialogHeader>
 				<div>

@@ -1,10 +1,8 @@
 import { useAuth } from "@/shared/auth/hooks/useAuth"
 import {
-	NavigationMenu,
 	NavigationMenuContent,
 	NavigationMenuItem,
 	NavigationMenuLink,
-	NavigationMenuList,
 	NavigationMenuTrigger,
 } from "@/shared/components/ui/navigation-menu"
 import { LogOut } from "lucide-react"
