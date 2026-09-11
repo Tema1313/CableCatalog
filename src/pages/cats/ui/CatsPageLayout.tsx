@@ -10,11 +10,11 @@ interface ICableProductsProps {
 export const CatsPageLayout: FC<ICableProductsProps> = (props) => {
 	return (
 		<ResizablePanelGroup direction="horizontal" className="overflow-auto">
-			<ResizablePanel defaultSize={10} maxSize={50}>
+			<ResizablePanel defaultSize={15} maxSize={50}>
 				<Filters />
 			</ResizablePanel>
 			<ResizableHandle />
-			<ResizablePanel defaultSize={90} className="relative flex flex-col">
+			<ResizablePanel defaultSize={85} className="relative flex flex-col">
 				<Cats catId={props.catId} />
 			</ResizablePanel>
 		</ResizablePanelGroup>

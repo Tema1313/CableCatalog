@@ -31,7 +31,8 @@ import type { ICat, ICatBreedType, ICatLocationType, ICoatType, IColor } from "@
 import { catBreeds, catCoatTypes, catColors, catLocationType } from "@/shared/api/testdata"
 import { CatPersonalInfoLayout } from "./cat-personal-info/CatPersonalInfoLayout"
 import catBread from "@assets/bread-icons/catbread.png"
-import catNotBread from "@assets/bread-icons/nocatbread.png"
+import catNotBread from "@assets/bread-icons/catnobread.png"
+import { CreateCat } from "./CreateCat"
 
 interface ICableProductsProps {
 	catId?: number
@@ -139,6 +140,10 @@ export const Cats: FC<ICableProductsProps> = (props) => {
 			},
 		},
 		{
+			accessorKey: "softness",
+			header: ({ column }) => <TableHeaderSortCell title="Мягкость" {...column} />,
+		},
+		{
 			accessorKey: "date",
 			header: ({ column }) => <TableHeaderSortCell title="Дата рождения" {...column} />,
 			cell: ({ row }) => {
@@ -202,7 +207,7 @@ export const Cats: FC<ICableProductsProps> = (props) => {
 
 	return (
 		<ResizablePanelGroup direction="horizontal">
-			<ResizablePanel defaultSize={props.catId ? 20 : 100}>
+			<ResizablePanel defaultSize={props.catId ? 40 : 100}>
 				<div className="m-4">
 					<div className="flex justify-between">
 						<div className="mb-3 text-xl font-bold">Котеечная продукция</div>
@@ -225,7 +230,7 @@ export const Cats: FC<ICableProductsProps> = (props) => {
 							>
 								<Eraser color="#f7bb88" />
 							</Button>
-							{/* <CreateNode isMainNode={true} /> */}
+							<CreateCat />
 							<Warning actionClick={() => {}} description="Вывести марку кабеля из использования?" actionTitle="Да">
 								<Button disabled={!currentCableProduct} title="Удалить" variant="ghost" className="cursor-pointer p-2">
 									<X color="red" strokeWidth={4} />
@@ -321,7 +326,7 @@ export const Cats: FC<ICableProductsProps> = (props) => {
 			{props.catId && (
 				<>
 					<ResizableHandle />
-					<ResizablePanel defaultSize={80} className="relative flex flex-col">
+					<ResizablePanel defaultSize={60} className="relative flex flex-col">
 						<CatPersonalInfoLayout catId={props.catId} />
 					</ResizablePanel>
 				</>
